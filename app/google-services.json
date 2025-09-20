@@ -12,7 +12,20 @@
           "package_name": "com.example.stoky"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "214910851441-v7eqa27l7oapm8drhi9hbgq3jkirthvc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stoky",
+            "certificate_hash": "22606cbfbe7647d91012e8664bb7d3b6a82c465d"
+          }
+        },
+        {
+          "client_id": "214910851441-kji0fj2u004fgvm21tl6fo966kpvjcd0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBFjNhD1TWKaJGO8t-QGO3WGc721X1o9qA"
@@ -20,26 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:214910851441:android:6b8180349b2c1a20967ed0",
-        "android_client_info": {
-          "package_name": "com.stoky"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBFjNhD1TWKaJGO8t-QGO3WGc721X1o9qA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "214910851441-kji0fj2u004fgvm21tl6fo966kpvjcd0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
