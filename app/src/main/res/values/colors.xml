@@ -5,6 +5,44 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- Colores principales -->
+    <color name="colorPrimary">#1976D2</color>
+    <color name="colorPrimaryDark">#1565C0</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <!-- Colores de texto -->
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+
+    <!-- Botón de Google -->
+    <color name="google_button_text">#757575</color>
+
+    <!-- Colores básicos -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray_light">#F5F5F5</color>
+    <color name="gray_border">#DADCE0</color>
+    <color name="white_alpha_80">#CCFFFFFF</color>
+    <color name="background_light">#F8F9FA</color>
+
+    <!-- Colores para las cards con tonos vivos pero suaves -->
+    <color name="card_ventas">#4A90E2</color>         <!-- Azul moderno -->
+    <color name="card_inventario">#7ED321</color>      <!-- Verde vibrante -->
+    <color name="card_salidas">#F5A623</color>         <!-- Naranja cálido -->
+    <color name="card_gastos">#D0021B</color>          <!-- Rojo elegante -->
+    <color name="card_reservas">#9013FE</color>        <!-- Púrpura moderno -->
+    <color name="card_graficos">#50E3C2</color>        <!-- Turquesa -->
+    <color name="card_reportes">#B8E986</color>        <!-- Verde lima suave -->
+    <color name="card_configuracion">#BD10E0</color>   <!-- Magenta -->
+
+    <!-- Gradientes para el header -->
+    <color name="header_gradient_start">#4A90E2</color>
+    <color name="header_gradient_end">#50E3C2</color>
+
+    <!-- Colores adicionales -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="divider">#BDBDBD</color>
+
 </resources>

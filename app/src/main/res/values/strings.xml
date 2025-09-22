@@ -40,5 +40,5 @@
     <!-- Firebase -->
     <!-- IMPORTANTE: Este es el Web Client ID de tu proyecto Firebase -->
     <!-- Debes obtenerlo de tu consola de Firebase y reemplazar este valor -->
-    <string name="default_web_client_id">TU_WEB_CLIENT_ID_AQUI</string>
+    <string name="default_web_client_id">214910851441-kji0fj2u004fgvm21tl6fo966kpvjcd0.apps.googleusercontent.com</string>
 </resources>

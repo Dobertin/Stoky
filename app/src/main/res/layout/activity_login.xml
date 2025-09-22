@@ -81,14 +81,7 @@
             android:textColor="@color/secondary_text"
             android:layout_marginBottom="16dp" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/btnGoogleLogin"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Alternativa si no quieres usar SignInButton de Google -->
-        <!--
+        <!-- Botón personalizado de Google en lugar de SignInButton -->
         <Button
             android:id="@+id/btnGoogleLogin"
             android:layout_width="match_parent"
@@ -98,10 +91,10 @@
             android:drawableLeft="@drawable/ic_google"
             android:drawablePadding="12dp"
             android:gravity="center"
+            style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/google_button_background"
-            android:textColor="@color/google_button_text"
+            android:textColor="@color/white"
             android:layout_marginBottom="24dp" />
-        -->
 
         <LinearLayout
             android:layout_width="wrap_content"

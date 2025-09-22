@@ -96,16 +96,9 @@ class LoginActivity : AppCompatActivity() {
                     }
                     Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
 
-                    // Navegar según el rol
-                    when (it.usuario.rol) {
-                        "admin" -> {
-                            // startActivity(Intent(this, AdminActivity::class.java))
-                        }
-                        "vendedor" -> {
-                            // startActivity(Intent(this, VendedorActivity::class.java))
-                        }
-                    }
-                    finish()
+                    // Navegar al MainActivity con el rol del usuario
+                    navigateToMainActivity(it.usuario.rol, it.usuario.nombre)
+
                 } else {
                     // Login fallido
                     Toast.makeText(this, it.errorMessage ?: "Error de login", Toast.LENGTH_LONG).show()
@@ -160,12 +153,20 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showRegisterDialog() {
-        // Aquí puedes abrir una nueva Activity o mostrar un Dialog para registro
-        // Por ahora, mostraré un Toast indicando que se debe implementar
-        Toast.makeText(this, "Pantalla de registro por implementar", Toast.LENGTH_SHORT).show()
+        // Navegar a la Activity de registro
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+    }
 
-        // Ejemplo de registro directo (puedes crear una Activity separada)
-        // val intent = Intent(this, RegisterActivity::class.java)
-        // startActivity(intent)
+    private fun navigateToMainActivity(userRole: String, userName: String) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("USER_ROLE", userRole)
+        intent.putExtra("USER_NAME", userName)
+
+        // Limpiar el stack de activities para evitar volver al login con el botón back
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        startActivity(intent)
+        finish()
     }
 }

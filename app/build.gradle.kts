@@ -57,21 +57,24 @@ dependencies {
 
     // Firebase (con BoM)
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.database)
-    implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.database)
 
-    // Coroutines
-    implementation(libs.coroutines.android)
+    // Google Sign-In
+    implementation(libs.play.services.auth)
 
-    // Android Views
+    // Material Design clásico
     implementation(libs.material)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
 
-    // Navigation
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
+    // Activity
+    implementation(libs.androidx.activity.ktx)
+
+    // Coroutines
+    implementation(libs.coroutines.android)
+    implementation(libs.coroutines.play.services)
     implementation(libs.androidx.activity)
 
     // Tests
