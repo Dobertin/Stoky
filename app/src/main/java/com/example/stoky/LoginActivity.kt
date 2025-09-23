@@ -8,17 +8,15 @@ import androidx.activity.viewModels
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import ViewModels.LoginViewModel
+import viewModels.LoginViewModel
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.example.stoky.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginActivity : AppCompatActivity() {
 
@@ -66,9 +64,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initGoogleSignIn() {
-        // Configurar Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id)) // Necesitas agregar esto en strings.xml
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
@@ -95,10 +92,7 @@ class LoginActivity : AppCompatActivity() {
                         else -> "Bienvenido ${it.usuario.nombre}"
                     }
                     Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
-
-                    // Navegar al MainActivity con el rol del usuario
                     navigateToMainActivity(it.usuario.rol, it.usuario.nombre)
-
                 } else {
                     // Login fallido
                     Toast.makeText(this, it.errorMessage ?: "Error de login", Toast.LENGTH_LONG).show()
@@ -128,7 +122,6 @@ class LoginActivity : AppCompatActivity() {
         btnLogin.setOnClickListener {
             val correo = etCorreo.text.toString().trim()
             val password = etPassword.text.toString()
-
             viewModel.loginWithEmail(correo, password)
         }
 
@@ -137,12 +130,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btnRegister.setOnClickListener {
-            // Ir a pantalla de registro o mostrar dialog
             showRegisterDialog()
         }
 
         tvRegister.setOnClickListener {
-            // Ir a pantalla de registro
             showRegisterDialog()
         }
     }
@@ -153,7 +144,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showRegisterDialog() {
-        // Navegar a la Activity de registro
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
     }
@@ -162,10 +152,7 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("USER_ROLE", userRole)
         intent.putExtra("USER_NAME", userName)
-
-        // Limpiar el stack de activities para evitar volver al login con el botón back
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
         startActivity(intent)
         finish()
     }

@@ -1,12 +1,18 @@
-package ViewModels
+package viewModels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import Models.LoginResult
-import Repository.AuthRepository
-import Repository.FirestoreRepository
+import models.LoginResult
+import repository.AuthRepository
+import repository.FirestoreRepository
+import models.Usuario
+
+data class AccountConflictData(
+    val existingUser: Usuario,
+    val googleEmail: String
+)
 
 class LoginViewModel : ViewModel() {
 
@@ -20,6 +26,10 @@ class LoginViewModel : ViewModel() {
 
     private val _validationError = MutableLiveData<String?>()
     val validationError: MutableLiveData<String?> = _validationError
+
+    // Para manejar conflictos de cuentas (opcional si quieres el dialog)
+    private val _accountConflict = MutableLiveData<AccountConflictData?>()
+    val accountConflict: MutableLiveData<AccountConflictData?> = _accountConflict
 
     /**
      * Login tradicional con email y contraseña
@@ -52,7 +62,7 @@ class LoginViewModel : ViewModel() {
     }
 
     /**
-     * Login con Google
+     * Login con Google - Mejorado para manejar cuentas existentes
      */
     fun loginWithGoogle(idToken: String) {
         _isLoading.value = true
@@ -60,7 +70,7 @@ class LoginViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val result = authRepository.loginWithGoogle(idToken)
+                val result = authRepository.loginWithGoogleImproved(idToken)
                 _loginResult.value = result
             } catch (e: Exception) {
                 _loginResult.value = LoginResult(false, null, "Error en login con Google: ${e.message}")
@@ -95,7 +105,7 @@ class LoginViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val nuevoUsuario = Models.Usuario(
+                val nuevoUsuario = models.Usuario(
                     correo = correo,
                     nombre = nombre,
                     pwd = password,
@@ -119,6 +129,24 @@ class LoginViewModel : ViewModel() {
     }
 
     /**
+     * Vincular cuentas (para usar con dialog de confirmación)
+     */
+    fun linkAccounts(existingUser: Usuario, googleEmail: String) {
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            try {
+                val result = authRepository.linkGoogleAccount(existingUser)
+                _loginResult.value = result
+            } catch (e: Exception) {
+                _loginResult.value = LoginResult(false, null, "Error vinculando cuentas: ${e.message}")
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    /**
      * Limpiar resultado del login
      */
     fun clearLoginResult() {
@@ -130,6 +158,13 @@ class LoginViewModel : ViewModel() {
      */
     fun clearValidationError() {
         _validationError.value = null
+    }
+
+    /**
+     * Limpiar conflicto de cuentas
+     */
+    fun clearAccountConflict() {
+        _accountConflict.value = null
     }
 
     /**

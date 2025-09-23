@@ -6,8 +6,7 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import ViewModels.LoginViewModel
-import com.example.stoky.R
+import viewModels.LoginViewModel
 
 class RegisterActivity : AppCompatActivity() {
 
