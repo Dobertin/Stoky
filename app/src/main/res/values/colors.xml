@@ -45,4 +45,21 @@
     <color name="text_secondary">#757575</color>
     <color name="divider">#BDBDBD</color>
 
+    <!-- Colores principales -->
+    <color name="primary_color">#1976D2</color>
+    <color name="primary_variant">#1565C0</color>
+    <color name="secondary_color">#03DAC6</color>
+
+    <!-- Colores de superficie -->
+    <color name="surface_color">#FFFFFF</color>
+    <color name="background_color">#FAFAFA</color>
+
+    <!-- Colores de estado -->
+    <color name="success_color">#4CAF50</color>
+    <color name="warning_color">#FF9800</color>
+    <color name="danger_color">#F44336</color>
+
+    <!-- Otros colores -->
+    <color name="divider_color">#E0E0E0</color>
+
 </resources>

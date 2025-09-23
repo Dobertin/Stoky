@@ -90,8 +90,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         cardVentas.setOnClickListener {
-            // TODO: Navegar a VentasActivity
-            navigateToActivity("VentasActivity")
+            val intent = Intent(this, VentasActivity::class.java)
+            intent.putExtra("USER_ROLE", userRole)
+            intent.putExtra("USER_NAME", userName)
+            startActivity(intent)
         }
 
         cardInventario.setOnClickListener {
@@ -139,7 +141,6 @@ class MainActivity : AppCompatActivity() {
         // Ejemplo de cómo implementar la navegación real:
         /*
         when (activityName) {
-            "VentasActivity" -> startActivity(Intent(this, VentasActivity::class.java))
             "InventarioActivity" -> startActivity(Intent(this, InventarioActivity::class.java))
             "SalidasActivity" -> startActivity(Intent(this, SalidasActivity::class.java))
             "GastosActivity" -> startActivity(Intent(this, GastosActivity::class.java))

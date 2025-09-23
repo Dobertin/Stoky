@@ -10,6 +10,10 @@ activity = "1.8.2"
 activityCompose = "1.11.0"
 composeBom = "2024.09.00"
 googleGmsGoogleServices = "4.4.3"
+recyclerview = "1.3.0"
+cardview = "1.0.0"
+zxingEmbedded = "4.3.0"
+zxingCore = "3.5.1"
 
 # Firebase (usando BoM)
 firebaseBom = "32.7.0"
@@ -72,6 +76,14 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activityVersion" }
+
+# QR / Barcode
+zxing-embedded = { group = "com.journeyapps", name = "zxing-android-embedded", version.ref = "zxingEmbedded" }
+zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxingCore" }
+
+# UI clásico
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

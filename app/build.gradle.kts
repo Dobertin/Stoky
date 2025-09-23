@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    // Firebase (con BoM)
+    // 🔥 Firebase (con BoM)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
@@ -69,13 +69,20 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
 
+    // RecyclerView & CardView
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.cardview)
+
+    // QR / Barcode Scanner
+    implementation(libs.zxing.embedded)
+    implementation(libs.zxing.core)
+
     // Activity
     implementation(libs.androidx.activity.ktx)
 
     // Coroutines
     implementation(libs.coroutines.android)
     implementation(libs.coroutines.play.services)
-    implementation(libs.androidx.activity)
 
     // Tests
     testImplementation(libs.junit)
@@ -86,3 +93,4 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+

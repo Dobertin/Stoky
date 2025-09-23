@@ -8,7 +8,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FirestoreRepository {
+open class FirestoreRepository {
     private val firestore = FirebaseFirestore.getInstance()
 
     suspend fun <T> getDocument(
