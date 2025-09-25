@@ -41,6 +41,18 @@
             android:textSize="16sp"
             android:layout_marginTop="4dp" />
 
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="-28dp"
+            android:text="Cerrar Sesión"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:background="@drawable/button_logout_style"
+            android:paddingHorizontal="16dp"
+            android:layout_gravity="end" />
+
     </LinearLayout>
 
     <!-- ScrollView para las cards -->

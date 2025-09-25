@@ -3,7 +3,7 @@ package models
 import java.io.Serializable
 
 data class Producto(
-    val codigo: String = "",
+    val codigo: Int = 0,
     val descripcion: String = "",
     val categoria: String = "",
     val medida: String = "",

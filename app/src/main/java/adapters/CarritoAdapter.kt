@@ -61,15 +61,15 @@ class CarritoAdapter(
 
             // Configurar botones
             btnDecrementar.setOnClickListener {
-                onDecrementar(item.producto.codigo)
+                //onDecrementar(item.producto.codigo)
             }
 
             btnIncrementar.setOnClickListener {
-                onIncrementar(item.producto.codigo)
+                //onIncrementar(item.producto.codigo)
             }
 
             btnRemover.setOnClickListener {
-                onRemover(item.producto.codigo)
+                //onRemover(item.producto.codigo)
             }
 
             // Deshabilitar decrementar si la cantidad es 1

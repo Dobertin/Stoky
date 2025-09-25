@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -18,6 +19,7 @@ import models.Producto
 import repository.FirestoreRepository
 import kotlinx.coroutines.*
 import com.google.firebase.firestore.DocumentSnapshot
+import kotlin.math.log
 
 class VentasActivity : AppCompatActivity() {
 
@@ -125,35 +127,53 @@ class VentasActivity : AppCompatActivity() {
     private fun loadProducts() {
         coroutineScope.launch {
             try {
+                Log.d("VentasActivity", "Iniciando carga de productos...")
                 val result = repository.getCollection("productos")
+
                 result.onSuccess { documents ->
+                    Log.d("VentasActivity", "Productos obtenidos: ${documents.size}")
+
                     productosList.clear()
                     for (doc in documents) {
+                        Log.d("VentasActivity", "Procesando documento ID=${doc.id}")
                         val producto = documentToProducto(doc)
                         if (producto != null) {
                             productosList.add(producto)
+                            Log.d("VentasActivity", "Producto agregado: ${producto.codigo} - ${producto.descripcion}")
+                        } else {
+                            Log.w("VentasActivity", "Documento inválido o incompleto: ${doc.id}")
                         }
                     }
+
                     productosFilteredList.clear()
                     productosFilteredList.addAll(productosList)
                     productosAdapter.notifyDataSetChanged()
+                    Log.d("VentasActivity", "Adaptador actualizado con ${productosList.size} productos")
+
                 }.onFailure { exception ->
-                    Toast.makeText(this@VentasActivity,
+                    Log.e("VentasActivity", "Error al cargar productos", exception)
+                    Toast.makeText(
+                        this@VentasActivity,
                         "Error al cargar productos: ${exception.message}",
-                        Toast.LENGTH_LONG).show()
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@VentasActivity,
+                Log.e("VentasActivity", "Error inesperado", e)
+                Toast.makeText(
+                    this@VentasActivity,
                     "Error inesperado: ${e.message}",
-                    Toast.LENGTH_LONG).show()
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
+
     private fun documentToProducto(document: DocumentSnapshot): Producto? {
         return try {
             Producto(
-                codigo = document.getString("codigo") ?: "",
+                codigo = document.getLong("codigo")?.toInt() ?: 0,
                 descripcion = document.getString("descripcion") ?: "",
                 categoria = document.getString("categoria") ?: "",
                 medida = document.getString("medida") ?: "",
@@ -179,7 +199,6 @@ class VentasActivity : AppCompatActivity() {
         } else {
             val filtered = productosList.filter { producto ->
                 producto.descripcion.contains(query, ignoreCase = true) ||
-                        producto.codigo.contains(query, ignoreCase = true) ||
                         producto.categoria.contains(query, ignoreCase = true)
             }
             productosFilteredList.addAll(filtered)
@@ -188,7 +207,7 @@ class VentasActivity : AppCompatActivity() {
     }
 
     private fun buscarProductoPorCodigo(codigo: String) {
-        val producto = productosList.find { it.codigo == codigo }
+        val producto = productosList.find { it.codigo == codigo.toInt() }
         if (producto != null) {
             agregarProductoAlCarrito(producto)
         } else {

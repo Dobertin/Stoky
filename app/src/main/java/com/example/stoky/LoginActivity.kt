@@ -1,6 +1,7 @@
 package com.example.stoky
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
@@ -34,6 +35,42 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var tvRegister: TextView
     private lateinit var progressBar: ProgressBar
 
+    // SharedPreferences para mantener sesión
+    private lateinit var sessionPrefs: SharedPreferences
+
+    companion object {
+        private const val SESSION_PREFS = "session_prefs"
+        private const val KEY_IS_LOGGED_IN = "is_logged_in"
+        private const val KEY_USER_ROLE = "user_role"
+        private const val KEY_USER_NAME = "user_name"
+        private const val KEY_USER_EMAIL = "user_email"
+        private const val KEY_LOGIN_TYPE = "login_type"
+
+        // Método estático para limpiar sesión desde otras actividades
+        fun clearSession(activity: AppCompatActivity) {
+            val prefs = activity.getSharedPreferences(SESSION_PREFS, MODE_PRIVATE)
+            prefs.edit().clear().apply()
+        }
+
+        // Método estático para verificar si hay sesión activa desde otras actividades
+        fun isSessionActive(activity: AppCompatActivity): Boolean {
+            val prefs = activity.getSharedPreferences(SESSION_PREFS, MODE_PRIVATE)
+            return prefs.getBoolean(KEY_IS_LOGGED_IN, false)
+        }
+
+        // Método para obtener datos del usuario desde otras actividades
+        fun getUserData(activity: AppCompatActivity): Triple<String, String, String>? {
+            val prefs = activity.getSharedPreferences(SESSION_PREFS, MODE_PRIVATE)
+            if (prefs.getBoolean(KEY_IS_LOGGED_IN, false)) {
+                val role = prefs.getString(KEY_USER_ROLE, "") ?: ""
+                val name = prefs.getString(KEY_USER_NAME, "") ?: ""
+                val email = prefs.getString(KEY_USER_EMAIL, "") ?: ""
+                return Triple(role, name, email)
+            }
+            return null
+        }
+    }
+
     // Activity Result Launcher para Google Sign-In
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -55,6 +92,16 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Inicializar SharedPreferences
+        sessionPrefs = getSharedPreferences(SESSION_PREFS, MODE_PRIVATE)
+
+        // Verificar si ya hay una sesión activa
+        if (isUserLoggedIn()) {
+            navigateToMainActivityFromSession()
+            return
+        }
+
         setContentView(R.layout.activity_login)
 
         initGoogleSignIn()
@@ -86,7 +133,9 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginResult.observe(this, Observer { result ->
             result?.let {
                 if (it.isSuccess && it.usuario != null) {
-                    // Login exitoso
+                    // Login exitoso - Guardar sesión
+                    saveUserSession(it.usuario.rol, it.usuario.nombre, it.usuario.correo ?: "", it.tipoLogin ?: "email")
+
                     val mensaje = when (it.tipoLogin) {
                         "google" -> "Bienvenido ${it.usuario.nombre} (Google)"
                         else -> "Bienvenido ${it.usuario.nombre}"
@@ -148,6 +197,34 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    // Métodos para manejar la persistencia de sesión
+    private fun saveUserSession(userRole: String, userName: String, userEmail: String, loginType: String) {
+        sessionPrefs.edit().apply {
+            putBoolean(KEY_IS_LOGGED_IN, true)
+            putString(KEY_USER_ROLE, userRole)
+            putString(KEY_USER_NAME, userName)
+            putString(KEY_USER_EMAIL, userEmail)
+            putString(KEY_LOGIN_TYPE, loginType)
+            apply()
+        }
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        return sessionPrefs.getBoolean(KEY_IS_LOGGED_IN, false)
+    }
+
+    private fun navigateToMainActivityFromSession() {
+        val userRole = sessionPrefs.getString(KEY_USER_ROLE, "") ?: ""
+        val userName = sessionPrefs.getString(KEY_USER_NAME, "") ?: ""
+
+        if (userRole.isNotEmpty() && userName.isNotEmpty()) {
+            navigateToMainActivity(userRole, userName)
+        } else {
+            // Si los datos están corruptos, limpiar sesión
+            clearUserSession()
+        }
+    }
+
     private fun navigateToMainActivity(userRole: String, userName: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("USER_ROLE", userRole)
@@ -156,4 +233,10 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+    // Método público para limpiar la sesión (se puede llamar desde otras actividades)
+    fun clearUserSession() {
+        sessionPrefs.edit().clear().apply()
+    }
+
 }

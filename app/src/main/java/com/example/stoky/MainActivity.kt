@@ -9,12 +9,16 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
+import android.app.AlertDialog
+import android.widget.Button
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tvWelcome: TextView
     private lateinit var tvUserRole: TextView
-
+    private lateinit var btnLogout: Button
     // Cards
     private lateinit var cardVentas: CardView
     private lateinit var cardInventario: CardView
@@ -30,12 +34,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Verificar si la sesión sigue siendo válida
+        if (!LoginActivity.isSessionActive(this)) {
+            // Si no hay sesión activa, redirigir al login
+            navigateToLogin()
+            return
+        }
+
         setContentView(R.layout.activity_main)
 
         // Configurar padding para system bars
         setupSystemBars()
 
-        // Obtener datos del intent
+        // Obtener datos del intent o de la sesión guardada
         getUserDataFromIntent()
 
         // Inicializar vistas
@@ -46,6 +58,9 @@ class MainActivity : AppCompatActivity() {
 
         // Configurar listeners
         setupClickListeners()
+
+        // Configurar botón de logout
+        setupLogoutButton()
     }
 
     private fun setupSystemBars() {
@@ -57,13 +72,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getUserDataFromIntent() {
-        userRole = intent.getStringExtra("USER_ROLE") ?: "vendedor"
-        userName = intent.getStringExtra("USER_NAME") ?: "Usuario"
+        // Primero intentar obtener del intent
+        userRole = intent.getStringExtra("USER_ROLE").toString()
+        userName = intent.getStringExtra("USER_NAME").toString()
+
+        // Si no hay datos en el intent, obtener de la sesión guardada
+        if (userRole.isNullOrEmpty() || userName.isNullOrEmpty()) {
+            val userData = LoginActivity.getUserData(this)
+            userData?.let {
+                userRole = it.first  // role
+                userName = it.second // name
+            } ?: run {
+                userRole = "vendedor"
+                userName = "Usuario"
+            }
+        }
     }
 
     private fun initViews() {
         tvWelcome = findViewById(R.id.tvWelcome)
         tvUserRole = findViewById(R.id.tvUserRole)
+        btnLogout = findViewById(R.id.btnLogout) // Agregar esta línea
 
         cardVentas = findViewById(R.id.cardVentas)
         cardInventario = findViewById(R.id.cardInventario)
@@ -73,6 +102,45 @@ class MainActivity : AppCompatActivity() {
         cardGraficos = findViewById(R.id.cardGraficos)
         cardReportes = findViewById(R.id.cardReportes)
         cardConfiguracion = findViewById(R.id.cardConfiguracion)
+    }
+    private fun setupLogoutButton() {
+        btnLogout.setOnClickListener {
+            showLogoutDialog()
+        }
+    }
+
+    private fun showLogoutDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Cerrar Sesión")
+            .setMessage("¿Estás seguro de que quieres cerrar sesión?")
+            .setPositiveButton("Sí") { _, _ ->
+                performLogout()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun performLogout() {
+        // Limpiar la sesión guardada en SharedPreferences
+        LoginActivity.clearSession(this)
+
+        // Cerrar sesión de Firebase Auth
+        FirebaseAuth.getInstance().signOut()
+
+        // Si el usuario se logueó con Google, también cerrar sesión de Google
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut().addOnCompleteListener {
+            // Navegar de vuelta al LoginActivity
+            navigateToLogin()
+        }
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun setupUIForRole() {
@@ -154,11 +222,7 @@ class MainActivity : AppCompatActivity() {
 
     // Método para cerrar sesión
     private fun logout() {
-        FirebaseAuth.getInstance().signOut()
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
+        showLogoutDialog()
     }
 
     override fun onBackPressed() {

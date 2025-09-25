@@ -32,16 +32,16 @@ object CarritoManager {
     }
 
     fun removerProducto(codigo: String) {
-        items.removeAll { it.producto.codigo == codigo }
+        items.removeAll { it.producto.codigo == codigo.toInt() }
     }
 
     fun actualizarCantidad(codigo: String, nuevaCantidad: Int): Boolean {
-        val item = items.find { it.producto.codigo == codigo }
+        val item = items.find { it.producto.codigo == codigo.toInt() }
         return item?.actualizarCantidad(nuevaCantidad) ?: false
     }
 
     fun incrementarCantidad(codigo: String): Boolean {
-        val item = items.find { it.producto.codigo == codigo }
+        val item = items.find { it.producto.codigo == codigo.toInt() }
         if (item != null) {
             item.incrementarCantidad()
             return true
@@ -50,7 +50,7 @@ object CarritoManager {
     }
 
     fun decrementarCantidad(codigo: String): Boolean {
-        val item = items.find { it.producto.codigo == codigo }
+        val item = items.find { it.producto.codigo == codigo.toInt() }
         if (item != null) {
             item.decrementarCantidad()
             return true
@@ -71,10 +71,10 @@ object CarritoManager {
     fun estaVacio(): Boolean = items.isEmpty()
 
     fun obtenerItem(codigo: String): CarritoItem? {
-        return items.find { it.producto.codigo == codigo }
+        return items.find { it.producto.codigo == codigo.toInt() }
     }
 
     fun tieneProducto(codigo: String): Boolean {
-        return items.any { it.producto.codigo == codigo }
+        return items.any { it.producto.codigo == codigo.toInt() }
     }
 }
